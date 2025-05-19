@@ -46,18 +46,25 @@ class CompareApi {
 		let addedColumns = {};
 		let addedTables = [];
 
-		let scripts = this.compareDatabaseObjects(
-			dbSourceObjects,
-			dbTargetObjects,
-			droppedConstraints,
-			droppedIndexes,
-			droppedViews,
-			addedColumns,
-			addedTables,
-			config,
-			eventEmitter
-		);
+		let scripts = [];
 
+		if (!config.compareOptions.schemaCompare.disable) {
+			scripts = this.compareDatabaseObjects(
+				dbSourceObjects,
+				dbTargetObjects,
+				droppedConstraints,
+				droppedIndexes,
+				droppedViews,
+				addedColumns,
+				addedTables,
+				config,
+				eventEmitter
+			);
+		}
+
+		if (config.compareOptions.transaction) {
+			scripts.unshift("\nSTART TRANSACTION;\n");
+		}
 		if (config.compareOptions.dataCompare.enable) {
 			scripts.push(
 				...(await this.compareTablesRecords(
@@ -74,6 +81,9 @@ class CompareApi {
 			eventEmitter.emit("compare", "Table records have been compared", 95);
 		}
 
+		if (config.compareOptions.transaction) {
+			scripts.push("\nCOMMIT TRANSACTION;\n");
+		}
 		let scriptFilePath = await this.saveSqlScript(scripts, config, scriptName, eventEmitter);
 
 		eventEmitter.emit("compare", "Compare completed", 100);
@@ -305,6 +315,7 @@ class CompareApi {
 				//Table not exists on target database, then generate the script to create table
 				actionLabel = "CREATE";
 				addedTables.push(sourceTable);
+				console.log(` ${sourceTable}`);
 				sqlScript.push(sql.generateCreateTableScript(sourceTable, sourceTables[sourceTable], config));
 				sqlScript.push(sql.generateChangeCommentScript(objectType.TABLE, sourceTable, sourceTables[sourceTable].comment));
 			}
