@@ -19,5 +19,5 @@ git pull upstream master
 
 <pre>
 git tag 1.5.3
-git tag origin 1.5.3
+git push origin tag 1.5.3
 </pre>
