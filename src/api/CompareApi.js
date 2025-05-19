@@ -23,7 +23,7 @@ class CompareApi {
 		let pgSourceClient = await core.makePgClient(config.sourceClient);
 		eventEmitter.emit(
 			"compare",
-			`Connected to source PostgreSQL ${pgSourceClient.version.version} on [${config.sourceClient.host}:${config.sourceClient.port}/${config.sourceClient.database}] `,
+			`Connected to source PostgreSQL ${pgSourceClient.version.value} on [${config.sourceClient.host}:${config.sourceClient.port}/${config.sourceClient.database}] `,
 			11
 		);
 
@@ -31,7 +31,7 @@ class CompareApi {
 		let pgTargetClient = await core.makePgClient(config.targetClient);
 		eventEmitter.emit(
 			"compare",
-			`Connected to target PostgreSQL ${pgTargetClient.version.version} on [${config.targetClient.host}:${config.targetClient.port}/${config.targetClient.database}] `,
+			`Connected to target PostgreSQL ${pgTargetClient.version.value} on [${config.targetClient.host}:${config.targetClient.port}/${config.targetClient.database}] `,
 			21
 		);
 

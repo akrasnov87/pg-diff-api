@@ -24,7 +24,7 @@ class MigrationApi {
 		let pgClient = await core.makePgClient(clientConfig);
 		eventEmitter.emit(
 			"migrate",
-			`Connected to PostgreSQL ${pgClient.version.version} on [${clientConfig.host}:${clientConfig.port}/${clientConfig.database}] `,
+			`Connected to PostgreSQL ${pgClient.version.value} on [${clientConfig.host}:${clientConfig.port}/${clientConfig.database}] `,
 			25
 		);
 
