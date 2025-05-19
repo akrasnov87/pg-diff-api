@@ -13,7 +13,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/michaelsogos/pg-diff-api.git"
+		"url": "git+https://github.com/akrasnov87/pg-diff-api.git"
 	},
 	"keywords": [
 		"pg",
@@ -29,21 +29,16 @@
 		"compare",
 		"tool"
 	],
-	"author": "Michael Sogos <michael.sogos@gurustudioweb.it> (https://github.com/michaelsogos)",
+	"author": "Aleksandr Krasnov <akrasnov87@gmail.com> (https://github.com/akrasnov87)",
 	"contributors": [
-		"captHarlock69",
-		"angulion",
-		"0xradical",
-		"AlekseiDanilov",
-		"JonathonCwik",
-		"olivierdalang"
+		
 	],
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/michaelsogos/pg-diff-api/issues",
-		"email": "michael.sogos@gurustudioweb.it"
+		"url": "https://github.com/akrasnov87/pg-diff-api/issues",
+		"email": "akrasnov87@gmail.com"
 	},
-	"homepage": "https://github.com/michaelsogos/pg-diff-api#readme",
+	"homepage": "https://github.com/akrasnov87/pg-diff-api#readme",
 	"engines": {
 		"node": ">=8.11.1"
 	},
