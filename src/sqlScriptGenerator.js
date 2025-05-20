@@ -583,7 +583,14 @@ var helper = {
 	generateUpdateTableRecordScript: function (table, fields, filterConditions, changes) {
 		let updates = [];
 		for (let field in changes) {
-			updates.push(`"${field}" = ${this.__generateSqlFormattedValue(field, fields, changes[field])}`);
+			let dataIgnoreIndex = fields.findIndex((_field) => {
+				return field === _field.name && _field.ignore == true;
+			});
+			if(dataIgnoreIndex < 0) {
+				updates.push(`"${field}" = ${this.__generateSqlFormattedValue(field, fields, changes[field])}`);
+			} else {
+				console.debug(`ignore column ${table}.${field}`)
+			}
 		}
 
 		let conditions = [];
@@ -677,6 +684,8 @@ var helper = {
 					case "jsonb":
 					case "json":
 						return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+					case "bytea":
+						return `convert_to('${value.toString()}', 'UTF8')`;
 					default:
 						//like XML, UUID, GEOMETRY, etc.
 						return `'${value.replace(/'/g, "''")}'`;

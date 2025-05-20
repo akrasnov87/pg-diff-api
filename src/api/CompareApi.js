@@ -1384,6 +1384,8 @@ class CompareApi {
 	 * @param {Object} addedColumns
 	 */
 	static compareTableRecords(tableDefinition, tableData, addedColumns) {
+		console.debug(`${tableDefinition.tableSchema}.${tableDefinition.tableName} starting...`);
+
 		let ignoredRowHash = [];
 		let result = {
 			/** @type {String[]} */
@@ -1394,6 +1396,29 @@ class CompareApi {
 
 		//Check if at least one sequence is for an ALWAYS IDENTITY in case the OVERRIDING SYSTEM VALUE must be issued
 		let isIdentityValuesAllowed = !tableData.sourceData.sequences.some((sequence) => sequence.identitytype === "ALWAYS");
+
+		// игнорирование колонок
+		if(tableDefinition.ignoreFields && tableDefinition.ignoreFields.length > 0) {
+			for (let idx in tableDefinition.ignoreFields) {
+				let field = tableDefinition.ignoreFields[idx];
+				
+				let dataNameIndex = tableData.sourceData.records.fields.findIndex((_field) => {
+					return field === _field.name;
+				});
+
+				if(dataNameIndex >= 0) {
+					tableData.sourceData.records.fields[dataNameIndex].ignore = true;
+				}
+
+				dataNameIndex = tableData.targetData.records.fields.findIndex((_field) => {
+					return field === _field.name;
+				});
+
+				if(dataNameIndex >= 0) {
+					tableData.targetData.records.fields[dataNameIndex].ignore = true;
+				}
+			}
+		}
 
 		tableData.sourceData.records.rows.forEach((record, index) => {
 			//Check if row hash has been ignored because duplicated or already processed from source
@@ -1555,7 +1580,7 @@ class CompareApi {
 		var targetValueType = typeof targetValue;
 
 		if (sourceValueType != targetValueType) return true;
-		else if (sourceValue instanceof Date) return sourceValue.getTime() !== targetValue.getTime();
+		else if (sourceValue instanceof Date && targetValue) return sourceValue.getTime() !== targetValue.getTime();
 		else if (sourceValue instanceof Object) return !deepEqual(sourceValue, targetValue);
 		else return sourceValue !== targetValue;
 	}
